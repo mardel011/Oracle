@@ -2,7 +2,14 @@ import React from "react";
 import Web3 from "web3";
 import { STOCK_ORACLE_ABI, STOCK_ORACLE_ADDRESS } from "./quotecontract";
 
+const web3 = new Web3("http://localhost:7545");
+const stockQuote = new web3.eth.Contract(
+  STOCK_ORACLE_ABI,
+ STOCK_ORACLE_ADDRESS
+);
+
 class Stock extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -16,6 +23,8 @@ class Stock extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.setStockOracle = this.setStockOracle.bind(this);
+    this.getStockVolume = this.getStockVolume.bind(this);
   }
   handleChange(event) {
     this.setState({ symbol: event.target.value });
@@ -45,23 +54,41 @@ class Stock extends React.Component {
       console.log(this.state.price, this.state.volume);
       console.log(this.state);
 
-      const web3 = new Web3("http://localhost:7545");
-      const accounts = web3.eth.getAccounts();
-      console.log("Account 0 = ", accounts[0]);
-
-      const stockQuote = new web3.eth.Contract(
-        STOCK_ORACLE_ABI,
-        STOCK_ORACLE_ADDRESS
-      );
-      console.log(stockQuote);
-      var retval = stockQuote.methods
-        .getStockPrice(web3.utils.fromAscii(this.state.symbol))
-        .call();
-      console.log(retval);
+     
     } catch (err) {
       console.log("fetch failed", err);
     }
   }
+  
+  async setStockOracle() {
+  const accounts = await web3.eth.getAccounts();
+  console.log("Account 0 = ", accounts[0]);
+
+  //const stockQuote = new web3.eth.Contract(
+    //STOCK_ORACLE_ABI,
+   // STOCK_ORACLE_ADDRESS
+  //);
+  console.log(stockQuote);
+  var retval = await stockQuote.methods
+    .setStock(web3.utils.fromAscii(this.state.symbol), parseInt(this.state.price), parseInt(this.state.volume))
+    .send({from: accounts[0]});
+    console.log(retval);
+  }
+
+
+  async getStockVolume() {
+    //const stockQuote = new web3.eth.Contract(
+      //STOCK_ORACLE_ABI,
+      //STOCK_ORACLE_ADDRESS
+    //);
+    console.log(stockQuote);
+    var retval = await stockQuote.methods
+      .getStockVolume(web3.utils.fromAscii(this.state.symbol))
+      .call().
+      //this.setState.getStockPrice(retval)
+      then(console.log());
+    }
+  
 
   render() {
     return (
@@ -97,10 +124,10 @@ class Stock extends React.Component {
           <button type="button" onClick={this.handleSubmit}>
             Click Button for API
           </button>
-          <button type="button" onClick={this.handleSubmit}>
+          <button type="button" onClick={this.setStockOracle}>
             Click Button for Get Stock Price
           </button>
-          <button type="button" onClick={this.handleSubmit}>
+          <button type="button" onClick={this.getStockVolume}>
             Click Button for Get Stock Volume
           </button>
         </div>

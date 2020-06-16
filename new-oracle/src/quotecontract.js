@@ -1,7 +1,30 @@
-export const STOCK_ORACLE_ADDRESS = '0x043908522c90381050e63398039fa294f44d670c'
-export const STOCK_ORACLE_ABI = //'SD9M9TA72DL6JJMJ'
+export const STOCK_ORACLE_ADDRESS = '0xa9a27749fa11754452097ed8660cf42f8de23b8d'
+export const STOCK_ORACLE_ABI = 
 
 [
+	{
+		"inputs": [
+			{
+				"internalType": "bytes4",
+				"name": "symbol",
+				"type": "bytes4"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_price",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_volume",
+				"type": "uint256"
+			}
+		],
+		"name": "setStock",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
 	{
 		"inputs": [
 			{
@@ -39,29 +62,5 @@ export const STOCK_ORACLE_ABI = //'SD9M9TA72DL6JJMJ'
 		],
 		"stateMutability": "view",
 		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes4",
-				"name": "symbol",
-				"type": "bytes4"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_price",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_volume",
-				"type": "uint256"
-			}
-		],
-		"name": "setStock",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
 	}
 ]
-
